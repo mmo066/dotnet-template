@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-template-app", "dotnet-template-app\dotnet-template-app.csproj", "{73E14A57-2DC7-4F1B-9CC6-DA858B83D7DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-template", "dotnet-template\dotnet-template.csproj", "{73E14A57-2DC7-4F1B-9CC6-DA858B83D7DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

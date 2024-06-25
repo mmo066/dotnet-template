@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace dotnet-template-app.Middlewares;
+namespace dotnet_template.Middlewares;
 
 public class ExceptionMiddleware
 {

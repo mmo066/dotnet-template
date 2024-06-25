@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dotnet-template-app
+  name: dotnet-template
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        elasticAppLogIndex: dotnet-template-app
+        elasticAppLogIndex: dotnet-template
     spec:
       containers:
-        - image: ghcr.io/politiet/dotnet-template-app:VERSION_NOT_SET
-          name: dotnet-template-app
+        - image: ghcr.io/politiet/dotnet-template:VERSION_NOT_SET
+          name: dotnet-template
           imagePullPolicy: Always
           env:
             - name: ASPNETCORE_ENVIRONMENT

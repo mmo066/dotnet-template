@@ -1,10 +1,10 @@
 commonLabels:
-  app: dotnet-template-app
+  app: dotnet-template
 
 resources:
   - ../../base
 
-namespace: stage-dotnet-template-app
+namespace: stage-dotnet-template
 
 configMapGenerator:
   - name: appsettings
@@ -12,7 +12,7 @@ configMapGenerator:
       - appsettings.json
 
 images:
-  - name: ghcr.io/politiet/dotnet-template-app
+  - name: ghcr.io/politiet/dotnet-template
     newTag: VERSION_TAG
 
 patches:

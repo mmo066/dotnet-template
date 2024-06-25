@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dotnet-template-app.Controllers;
+namespace dotnet_template.Controllers;
 
 [ApiController]
 [Route("[controller]")]
