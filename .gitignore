@@ -1,0 +1,14 @@
+# IDE files
+.vscode
+.idea
+.DotSettings.User
+.vs
+# Build files
+bin/
+obj/
+out/
+# MacOS specific
+.DS_Store
+
+# DOTNET
+.user

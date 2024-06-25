@@ -1,0 +1,24 @@
+commonLabels:
+  app: dotnet-template-app
+
+resources:
+  - ../../base
+
+namespace: stage-dotnet-template-app
+
+configMapGenerator:
+  - name: appsettings
+    files:
+      - appsettings.json
+
+images:
+  - name: ghcr.io/politiet/dotnet-template-app
+    newTag: VERSION_TAG
+
+patches:
+  - path: ingress.yaml
+    target:
+      kind: Ingress
+  - path: deployment.yaml
+    target:
+      kind: Deployment

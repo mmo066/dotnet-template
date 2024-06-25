@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-template-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        elasticAppLogIndex: dotnet-template-app
+    spec:
+      containers:
+        - image: ghcr.io/politiet/dotnet-template-app:VERSION_NOT_SET
+          name: dotnet-template-app
+          imagePullPolicy: Always
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: VALUE_NOT_SET
+            - name: HTTP_PROXY
+              value: "pol-c-squid.osl.basefarm.net:8888"
+            - name: HTTPS_PROXY
+              value: "pol-c-squid.osl.basefarm.net:8888"
+            - name: "NO_PROXY"
+              value: ".svc,.default,.local,.cluster.local,localhost,e95a9b2ed36c44508c99a40e8be42c3b.ece.basefarm.no"
+              
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 1
+            periodSeconds: 10
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+            
+          volumeMounts:
+            - name: appsettings
+              mountPath: /app/config
+      volumes:
+        - name: appsettings
+          configMap:
+            name: appsettings
+            
+      imagePullSecrets:
+        - name: githubkey

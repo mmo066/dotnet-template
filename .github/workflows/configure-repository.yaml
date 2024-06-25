@@ -1,0 +1,38 @@
+name: Configure repository
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/.github/workflows/configure-repository.yaml'
+
+jobs:
+  configure-repository:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+        
+      - name: Set up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          
+      - name: Set up project name
+        run: echo "PROJECT_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+        
+      - name: Run configuration script
+        run: |
+          chmod +x RUNME.sh
+          ./RUNME.sh
+          
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Repository configuration completed"
+          git push

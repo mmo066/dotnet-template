@@ -1,0 +1,25 @@
+name: Release or rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        default: test
+        type: choice
+        options:
+          - dev
+          - test
+          - stage
+          - prod
+
+jobs:
+  deploy:
+    if: github.ref != 'refs/heads/main'
+    name: Deploying ${{ inputs.version_tag }} to ${{ inputs.environment }}
+    uses: politiet/reusable-workflows/.github/workflows/deploy.yml@main
+    with:
+      deployment: ${{ github.event.repository.name }}
+      path: deploy/overlays/${{ inputs.environment }} #TODO Set path to deployment files
+      environment: ${{ inputs.environment }}
+    secrets: inherit

@@ -1,0 +1,30 @@
+name: Build and deploy (feature)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to run in"
+        default: dev
+        type: choice
+        options:
+          - dev
+          - test
+jobs:
+  build-and-push-docker-image:
+    if: github.ref != 'refs/heads/main'
+    name: Build and push from ${{ github.ref_name }}
+    uses: politiet/reusable-workflows/.github/workflows/build-and-push-docker-image-by-ref.yml@main
+    with:
+      image_name: ${{ github.repository }}
+      dockerfile_path: . #TODO Set path to dockerfile
+      
+  deploy:
+    name: Deploy 
+    needs: [build-and-push-docker-image]
+    uses: politiet/reusable-workflows/.github/workflows/deploy.yml@main
+    with:
+      deployment: ${{ github.event.repository.name }}
+      path: deploy/overlays/${{ inputs.environment }} #TODO Set path to deployment files
+      environment: ${{ inputs.environment }}
+    secrets: inherit

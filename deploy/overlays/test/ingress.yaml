@@ -1,0 +1,7 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: test-dotnet-template-app.bks-dev.politiet.no
+  
+- op: replace
+  path: /metadata/annotations/traefik.ingress.kubernetes.io~1router.middlewares
+  value: test-dotnet-template-app-whitelister@kubernetescrd

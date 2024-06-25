@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: whitelister
+spec:
+  ipWhiteList:
+    sourceRange:
+      - 10.11.205.96/27 #tilgang frå vpn
+      - 163.174.97.0/24 #tilgang frå origo
+      - 10.144.130.192/27 #tilgang frå dpno
+      - 10.144.130.96/27 #tilgang frå pno
+    ipStrategy:
+      depth: 1

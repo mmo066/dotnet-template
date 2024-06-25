@@ -1,0 +1,28 @@
+name: Create new version tag and GitHub pre-release
+
+on:
+  push:
+    branches: 
+      - main #Ideally on push to main (default branch)
+        
+jobs:  
+  check-and-update-version-tag:
+    name: Bump
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/hotfix' #Can only be triggered by main or hotfix
+    uses: politiet/reusable-workflows/.github/workflows/create-and-update-version-based-on-commit.yml@main
+
+  create-release:
+    needs: check-and-update-version-tag
+    name: Pre-releasing ${{ needs.check-and-update-version-tag.outputs.semver }} ${{ needs.check-and-update-version-tag.outputs.version_tag }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        
+      - name: Create release
+        run: gh release create ${{ needs.check-and-update-version-tag.outputs.version_tag }} -p --generate-notes
+
+      - name: Trigger deploy
+        run: gh workflow run -r ${{ needs.check-and-update-version-tag.outputs.version_tag }} build-and-deploy-and-publish-release.yml

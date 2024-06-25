@@ -1,0 +1,41 @@
+#This workflow is supposed to be triggered by a bot
+name: Build, deploy and publish release (prod)
+
+on: 
+  workflow_dispatch: 
+
+jobs:
+  build-and-push-docker-image:
+    if: github.ref != 'refs/heads/main' #Skip if main (default branch) is calling
+    uses: politiet/reusable-workflows/.github/workflows/build-and-push-docker-image-by-ref.yml@main
+    with:
+      image_name: ${{ github.repository }}
+      dockerfile_path: . #TODO Set the path to your dockerfile
+      
+  deploy:
+    if: github.ref != 'refs/heads/main' #Skip if main (default branch) is calling
+    name: Deploy 
+    strategy:
+      matrix:
+        environments: [test, prod] #Deploy to every environment with pending deploy to test and prod
+    needs: [build-and-push-docker-image]
+    uses: politiet/reusable-workflows/.github/workflows/deploy.yml@main
+    with:
+      deployment: ${{ github.event.repository.name }}
+      path: deploy/overlays/${{ matrix.environments }} #TODO Set the path to your deployment files
+      environment: ${{ matrix.environments }}
+    secrets: inherit
+
+  create-release:
+    name: Release ${{ github.ref_name }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        
+      - name: Create release
+        run: gh release edit ${{ github.ref_name }} --prerelease=false #Sets pre-release to actual release

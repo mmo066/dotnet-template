@@ -1,0 +1,8 @@
+commonLabels:
+  app: dotnet-template-app
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - whitelister.yaml
